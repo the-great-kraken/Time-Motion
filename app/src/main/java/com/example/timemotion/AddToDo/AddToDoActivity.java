@@ -1,0 +1,78 @@
+package com.example.timemotion.AddToDo;
+
+import android.app.FragmentManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+
+import com.example.timemotion.AppDefault.AppDefaultActivity;
+import com.example.timemotion.Main.MainFragment;
+import com.example.timemotion.R;
+
+public class AddToDoActivity extends AppDefaultActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        String theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+        if (theme.equals(MainFragment.LIGHTTHEME)) {
+            setTheme(R.style.CustomStyle_LightTheme);
+        } else {
+            setTheme(R.style.CustomStyle_DarkTheme);
+        }
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_add_to_do);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_close_white);
+        if (backArrow != null) {
+            backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(backArrow);
+        }
+    }
+
+    @Override
+    protected int contentViewLayoutRes() {
+        return R.layout.activity_add_to_do;
+    }
+
+    @NonNull
+    @Override
+    protected Fragment createInitialFragment() {
+        return AddToDoFragment.newInstance();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(this) != null) {
+                    NavUtils.navigateUpFromSameTask(this);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+}
+
